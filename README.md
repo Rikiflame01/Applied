@@ -1,32 +1,37 @@
-# React + TypeScript + Vite
+# Applied
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+A job-application tracker for the ITTHYNK Cohort 2026 React project. It keeps company, role, advert link, date sent, stage, and notes in one list, and flags anything still at **applied** more than fourteen days after you sent it.
 
-Currently, two official plugins are available:
+The list lives in `localStorage` on this machine. There are no accounts and no server.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+![The Applied list with stage counts, search, and cards](docs/screenshot.png)
 
-## React Compiler
+## Tools
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- React 19 and TypeScript on Vite
+- React Router for the four screens
+- React Hook Form for the add form
+- Tailwind CSS v4 and shadcn/ui (Radix) for layout, theme, and controls
+- Vitest, jsdom, and React Testing Library for tests
 
-## Expanding the Oxlint configuration
+## Run it locally
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```bash
+npm install
+npm run dev
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+Then open the URL Vite prints (usually `http://localhost:5173/`).
+
+```bash
+npm test -- --run
+npm run build
+```
+
+## Profiler
+
+Typing in the search box re-renders `ApplicationsPage`, `FilterBar`, `StageSummary`, and the cards still on screen, because search state lives on the page. Nothing was memoised after looking.
+
+## What I would do next
+
+Swap `src/api/applications.ts` for a real backend (stretch goal 1), then let TanStack Query own the loading and refresh work that `useApplications` does by hand.
