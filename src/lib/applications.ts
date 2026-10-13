@@ -56,6 +56,13 @@ export function formatSentOn(dateSent: string): string {
   });
 }
 
+export function localIsoDate(today: Date = new Date()): string {
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, "0");
+  const day = String(today.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
 export function describeTiming(application: Application): string {
   if (application.stage === "wishlist") {
     return "Not sent yet";
