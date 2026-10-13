@@ -7,11 +7,11 @@ type Props = {
 
 export function StageSummary({ counts }: Props) {
   return (
-    <ul className="stage-summary">
+    <ul className="mb-4 flex flex-wrap gap-x-4 gap-y-2 text-sm">
       {STAGES.map((stage) => (
-        <li key={stage} className="stage-summary__item">
-          <span className="stage-summary__label">{STAGE_LABELS[stage]}</span>
-          <span className="stage-summary__count">{counts[stage]}</span>
+        <li key={stage} className="flex items-baseline gap-1.5">
+          <span className="text-muted-foreground">{STAGE_LABELS[stage]}</span>
+          <span className="font-semibold text-foreground">{counts[stage]}</span>
         </li>
       ))}
     </ul>

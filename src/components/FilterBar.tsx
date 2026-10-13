@@ -1,5 +1,14 @@
 import { STAGE_LABELS, STAGES } from "../lib/applications";
 import type { Stage } from "../types";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export type StageFilter = Stage | "all";
 
@@ -17,32 +26,39 @@ export function FilterBar({
   onStageChange,
 }: Props) {
   return (
-    <form className="filter-bar" onSubmit={(event) => event.preventDefault()}>
-      <p className="filter-bar__field">
-        <label htmlFor="application-search">Search company or job title</label>
-        <input
+    <form
+      className="mb-4 grid grid-cols-1 gap-3 md:grid-cols-[1fr_12rem] md:items-end"
+      onSubmit={(event) => event.preventDefault()}
+    >
+      <div className="grid gap-1.5">
+        <Label htmlFor="application-search">Search company or job title</Label>
+        <Input
           id="application-search"
           type="search"
           value={search}
           onChange={(event) => onSearchChange(event.target.value)}
           placeholder="Search company or job title…"
         />
-      </p>
-      <p className="filter-bar__field">
-        <label htmlFor="application-stage-filter">Stage</label>
-        <select
-          id="application-stage-filter"
+      </div>
+      <div className="grid gap-1.5">
+        <Label htmlFor="application-stage-filter">Stage</Label>
+        <Select
           value={stage}
-          onChange={(event) => onStageChange(event.target.value as StageFilter)}
+          onValueChange={(value) => onStageChange(value as StageFilter)}
         >
-          <option value="all">All stages</option>
-          {STAGES.map((item) => (
-            <option key={item} value={item}>
-              {STAGE_LABELS[item]}
-            </option>
-          ))}
-        </select>
-      </p>
+          <SelectTrigger id="application-stage-filter" className="w-full">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All stages</SelectItem>
+            {STAGES.map((item) => (
+              <SelectItem key={item} value={item}>
+                {STAGE_LABELS[item]}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
     </form>
   );
 }

@@ -1,9 +1,20 @@
 import { useEffect, useRef } from "react";
+import { Controller, useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router";
-import { useForm } from "react-hook-form";
 import { useApplications } from "../hooks/useApplications";
 import { localIsoDate, STAGE_LABELS, STAGES } from "../lib/applications";
 import type { NewApplication, Stage } from "../types";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 
 type FormValues = {
   company: string;
@@ -20,6 +31,7 @@ export function NewApplicationPage() {
   const companyRef = useRef<HTMLInputElement | null>(null);
   const {
     register,
+    control,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<FormValues>({
@@ -58,17 +70,15 @@ export function NewApplicationPage() {
   }
 
   return (
-    <section className="page">
-      <p>
-        <Link to="/" className="text-link">
-          ← Back to all applications
-        </Link>
-      </p>
-      <h1>Add an application</h1>
-      <form className="application-form" onSubmit={handleSubmit(onSubmit)} noValidate>
-        <p className="filter-bar__field">
-          <label htmlFor="company">Company</label>
-          <input
+    <section className="space-y-4">
+      <Button asChild variant="link" className="h-auto px-0">
+        <Link to="/">← Back to all applications</Link>
+      </Button>
+      <h1 className="text-2xl font-semibold tracking-tight">Add an application</h1>
+      <form className="grid max-w-xl gap-4" onSubmit={handleSubmit(onSubmit)} noValidate>
+        <div className="grid gap-1.5">
+          <Label htmlFor="company">Company</Label>
+          <Input
             id="company"
             type="text"
             autoComplete="organization"
@@ -82,15 +92,15 @@ export function NewApplicationPage() {
             }}
           />
           {errors.company ? (
-            <span id="company-error" role="alert">
+            <span id="company-error" role="alert" className="text-sm font-medium text-destructive">
               {errors.company.message}
             </span>
           ) : null}
-        </p>
+        </div>
 
-        <p className="filter-bar__field">
-          <label htmlFor="role">Job title</label>
-          <input
+        <div className="grid gap-1.5">
+          <Label htmlFor="role">Job title</Label>
+          <Input
             id="role"
             type="text"
             aria-invalid={errors.role ? true : undefined}
@@ -102,15 +112,15 @@ export function NewApplicationPage() {
             })}
           />
           {errors.role ? (
-            <span id="role-error" role="alert">
+            <span id="role-error" role="alert" className="text-sm font-medium text-destructive">
               {errors.role.message}
             </span>
           ) : null}
-        </p>
+        </div>
 
-        <p className="filter-bar__field">
-          <label htmlFor="link">Link to the advert (optional)</label>
-          <input
+        <div className="grid gap-1.5">
+          <Label htmlFor="link">Link to the advert (optional)</Label>
+          <Input
             id="link"
             type="url"
             inputMode="url"
@@ -135,15 +145,15 @@ export function NewApplicationPage() {
             })}
           />
           {errors.link ? (
-            <span id="link-error" role="alert">
+            <span id="link-error" role="alert" className="text-sm font-medium text-destructive">
               {errors.link.message}
             </span>
           ) : null}
-        </p>
+        </div>
 
-        <p className="filter-bar__field">
-          <label htmlFor="dateSent">Date sent</label>
-          <input
+        <div className="grid gap-1.5">
+          <Label htmlFor="dateSent">Date sent</Label>
+          <Input
             id="dateSent"
             type="date"
             aria-invalid={errors.dateSent ? true : undefined}
@@ -156,36 +166,51 @@ export function NewApplicationPage() {
             })}
           />
           {errors.dateSent ? (
-            <span id="dateSent-error" role="alert">
+            <span id="dateSent-error" role="alert" className="text-sm font-medium text-destructive">
               {errors.dateSent.message}
             </span>
           ) : null}
-        </p>
+        </div>
 
-        <p className="filter-bar__field">
-          <label htmlFor="stage">Stage</label>
-          <select id="stage" disabled={isSubmitting} {...register("stage", { required: true })}>
-            {STAGES.map((stage) => (
-              <option key={stage} value={stage}>
-                {STAGE_LABELS[stage]}
-              </option>
-            ))}
-          </select>
-        </p>
+        <div className="grid gap-1.5">
+          <Label htmlFor="stage">Stage</Label>
+          <Controller
+            name="stage"
+            control={control}
+            render={({ field }) => (
+              <Select
+                value={field.value}
+                onValueChange={field.onChange}
+                disabled={isSubmitting}
+              >
+                <SelectTrigger id="stage" className="w-full">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {STAGES.map((stage) => (
+                    <SelectItem key={stage} value={stage}>
+                      {STAGE_LABELS[stage]}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
+          />
+        </div>
 
-        <p className="filter-bar__field">
-          <label htmlFor="notes">Notes (optional)</label>
-          <textarea id="notes" rows={4} disabled={isSubmitting} {...register("notes")} />
-        </p>
+        <div className="grid gap-1.5">
+          <Label htmlFor="notes">Notes (optional)</Label>
+          <Textarea id="notes" rows={4} disabled={isSubmitting} {...register("notes")} />
+        </div>
 
-        <p className="form-actions">
-          <button type="submit" className="add-application" disabled={isSubmitting}>
+        <div className="flex flex-wrap items-center gap-3">
+          <Button type="submit" variant="accent" disabled={isSubmitting}>
             {isSubmitting ? "Saving…" : "Save application"}
-          </button>
-          <Link to="/" className="text-link">
-            Cancel
-          </Link>
-        </p>
+          </Button>
+          <Button asChild variant="link">
+            <Link to="/">Cancel</Link>
+          </Button>
+        </div>
       </form>
     </section>
   );

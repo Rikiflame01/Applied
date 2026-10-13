@@ -4,7 +4,6 @@ import { ApplicationPage } from "./pages/ApplicationPage";
 import { ApplicationsPage } from "./pages/ApplicationsPage";
 import { NewApplicationPage } from "./pages/NewApplicationPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
-import "./App.css";
 
 function App() {
   return (

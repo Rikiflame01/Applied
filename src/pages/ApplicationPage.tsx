@@ -9,6 +9,27 @@ import {
   STAGES,
 } from "../lib/applications";
 import type { Application, Stage } from "../types";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 
 export function ApplicationPage() {
   const { id } = useParams();
@@ -18,7 +39,7 @@ export function ApplicationPage() {
 
   if (loading) {
     return (
-      <section className="page-message" aria-live="polite">
+      <section className="space-y-2" aria-live="polite">
         <p>Loading application…</p>
       </section>
     );
@@ -26,32 +47,28 @@ export function ApplicationPage() {
 
   if (error && !application) {
     return (
-      <section className="page-message">
-        <h1>Something went wrong</h1>
-        <p>{error}</p>
-        <p>
-          <button
-            type="button"
-            className="text-link text-link--button"
-            onClick={() => void reload()}
-          >
-            Try again
-          </button>
-        </p>
+      <section className="space-y-3">
+        <h1 className="text-2xl font-semibold tracking-tight">Something went wrong</h1>
+        <p className="text-muted-foreground">{error}</p>
+        <Button type="button" variant="outline" onClick={() => void reload()}>
+          Try again
+        </Button>
       </section>
     );
   }
 
   if (!application) {
     return (
-      <section className="page-message">
-        <h1>We could not find that application</h1>
-        <p>It may have been removed, or the address may be wrong.</p>
-        <p>
-          <Link to="/" className="text-link">
-            Back to all applications
-          </Link>
+      <section className="space-y-3">
+        <h1 className="text-2xl font-semibold tracking-tight">
+          We could not find that application
+        </h1>
+        <p className="text-muted-foreground">
+          It may have been removed, or the address may be wrong.
         </p>
+        <Button asChild variant="link">
+          <Link to="/">Back to all applications</Link>
+        </Button>
       </section>
     );
   }
@@ -105,107 +122,109 @@ function ApplicationDetail({
   }
 
   return (
-    <article className="page application-detail">
-      <p>
-        <Link to="/" className="text-link">
-          ← Back to all applications
-        </Link>
-      </p>
-      <header className="application-detail__header">
+    <article className="space-y-5">
+      <Button asChild variant="link" className="h-auto px-0">
+        <Link to="/">← Back to all applications</Link>
+      </Button>
+      <header className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <h1>{application.company}</h1>
-          <p className="application-detail__role">{application.role}</p>
+          <h1 className="text-2xl font-semibold tracking-tight">
+            {application.company}
+          </h1>
+          <p className="text-muted-foreground">{application.role}</p>
         </div>
         <StageBadge stage={application.stage} />
       </header>
-      <p className="application-card__meta">
+      <p className="text-sm text-muted-foreground">
         {describeTiming(application)}
         {application.link ? (
           <>
             {" · "}
-            <a href={application.link} target="_blank" rel="noreferrer">
+            <a
+              href={application.link}
+              target="_blank"
+              rel="noreferrer"
+              className="font-medium text-foreground underline-offset-4 hover:underline"
+            >
               View the advert ↗
             </a>
           </>
         ) : null}
       </p>
-      {nudge && <p className="nudge-marker">Needs a nudge</p>}
-      {error ? <p role="alert">{error}</p> : null}
+      {nudge ? (
+        <Badge className="border-transparent bg-amber-100 text-amber-900 dark:bg-amber-950 dark:text-amber-200">
+          Needs a nudge
+        </Badge>
+      ) : null}
+      {error ? (
+        <p role="alert" className="text-sm font-medium text-destructive">
+          {error}
+        </p>
+      ) : null}
 
-      <p className="filter-bar__field">
-        <label htmlFor="application-stage">Stage</label>
-        <select
-          id="application-stage"
+      <div className="grid max-w-xs gap-1.5">
+        <Label htmlFor="application-stage">Stage</Label>
+        <Select
           value={application.stage}
+          onValueChange={(value) => void handleStageChange(value as Stage)}
           disabled={saving}
-          onChange={(event) =>
-            void handleStageChange(event.target.value as Stage)
-          }
         >
-          {STAGES.map((stage) => (
-            <option key={stage} value={stage}>
-              {STAGE_LABELS[stage]}
-            </option>
-          ))}
-        </select>
-      </p>
+          <SelectTrigger id="application-stage" className="w-full">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {STAGES.map((stage) => (
+              <SelectItem key={stage} value={stage}>
+                {STAGE_LABELS[stage]}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
 
-      <section className="application-detail__notes">
-        <h2>
-          <label htmlFor="application-notes">Notes</label>
-        </h2>
-        <textarea
+      <section className="space-y-2 border-t pt-4">
+        <Label htmlFor="application-notes">Notes</Label>
+        <Textarea
           id="application-notes"
           value={notes}
           disabled={saving}
           onChange={(event) => setNotes(event.target.value)}
           rows={5}
         />
-        <p>
-          <button
-            type="button"
-            className="add-application"
-            disabled={saving}
-            onClick={() => void handleSaveNotes()}
-          >
-            {saving ? "Saving…" : "Save notes"}
-          </button>
-        </p>
+        <Button type="button" disabled={saving} onClick={() => void handleSaveNotes()}>
+          {saving ? "Saving…" : "Save notes"}
+        </Button>
       </section>
 
-      <section className="delete-panel">
-        {confirmDelete ? (
-          <>
-            <p>Remove this application? This cannot be undone.</p>
-            <p className="delete-panel__actions">
-              <button
-                type="button"
-                className="danger-button"
+      <section className="border-t pt-4">
+        <Button
+          type="button"
+          variant="destructive"
+          disabled={saving}
+          onClick={() => setConfirmDelete(true)}
+        >
+          Delete this application
+        </Button>
+        <AlertDialog open={confirmDelete} onOpenChange={setConfirmDelete}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Remove this application?</AlertDialogTitle>
+              <AlertDialogDescription>
+                This cannot be undone.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel disabled={saving}>Cancel</AlertDialogCancel>
+              <AlertDialogAction
+                variant="destructive"
                 disabled={saving}
                 onClick={() => void handleDelete()}
               >
                 Yes, delete it
-              </button>
-              <button
-                type="button"
-                className="text-link text-link--button"
-                disabled={saving}
-                onClick={() => setConfirmDelete(false)}
-              >
-                Cancel
-              </button>
-            </p>
-          </>
-        ) : (
-          <button
-            type="button"
-            className="text-link text-link--button"
-            disabled={saving}
-            onClick={() => setConfirmDelete(true)}
-          >
-            Delete this application
-          </button>
-        )}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </section>
     </article>
   );

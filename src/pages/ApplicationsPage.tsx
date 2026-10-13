@@ -5,6 +5,8 @@ import { FilterBar, type StageFilter } from "../components/FilterBar";
 import { StageSummary } from "../components/StageSummary";
 import { useApplications } from "../hooks/useApplications";
 import { countByStage } from "../lib/applications";
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export function ApplicationsPage() {
   const { applications, loading, error, reload } = useApplications();
@@ -23,34 +25,33 @@ export function ApplicationsPage() {
   });
 
   return (
-    <>
-      <h1 className="visually-hidden">Job applications</h1>
+    <div className="space-y-4">
+      <h1 className="sr-only">Job applications</h1>
       {loading ? (
-        <div className="loading-stack" aria-live="polite" aria-busy="true">
-          <p>Loading applications…</p>
-          <div className="skeleton" />
-          <div className="skeleton" />
-          <div className="skeleton" />
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-2" aria-live="polite" aria-busy="true">
+          <p className="sr-only">Loading applications…</p>
+          <Skeleton className="h-28" />
+          <Skeleton className="h-28" />
+          <Skeleton className="h-28" />
+          <Skeleton className="h-28" />
         </div>
       ) : error ? (
-        <section className="page-message">
-          <h2>Something went wrong</h2>
-          <p>{error}</p>
-          <p>
-            <button type="button" className="text-link text-link--button" onClick={() => void reload()}>
-              Try again
-            </button>
-          </p>
+        <section className="space-y-3">
+          <h2 className="text-xl font-semibold tracking-tight">Something went wrong</h2>
+          <p className="text-muted-foreground">{error}</p>
+          <Button type="button" variant="outline" onClick={() => void reload()}>
+            Try again
+          </Button>
         </section>
       ) : applications.length === 0 ? (
-        <section className="page-message">
-          <h2>There is nothing here yet</h2>
-          <p>Add your first application and it will show up on this list.</p>
-          <p>
-            <Link to="/new" className="add-application">
-              Add the first application
-            </Link>
+        <section className="space-y-3">
+          <h2 className="text-xl font-semibold tracking-tight">There is nothing here yet</h2>
+          <p className="text-muted-foreground">
+            Add your first application and it will show up on this list.
           </p>
+          <Button asChild variant="accent">
+            <Link to="/new">Add the first application</Link>
+          </Button>
         </section>
       ) : (
         <>
@@ -62,27 +63,29 @@ export function ApplicationsPage() {
             onStageChange={setStage}
           />
           {filtered.length === 0 ? (
-            <section className="page-message">
-              <h2>No jobs match those filters</h2>
-              <p>Try a different company, job title, or stage.</p>
-              <p>
-                <button
-                  type="button"
-                  className="text-link text-link--button"
-                  onClick={() => {
-                    setSearch("");
-                    setStage("all");
-                  }}
-                >
-                  Clear filters
-                </button>
+            <section className="space-y-3">
+              <h2 className="text-xl font-semibold tracking-tight">
+                No jobs match those filters
+              </h2>
+              <p className="text-muted-foreground">
+                Try a different company, job title, or stage.
               </p>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => {
+                  setSearch("");
+                  setStage("all");
+                }}
+              >
+                Clear filters
+              </Button>
             </section>
           ) : (
             <ApplicationList applications={filtered} />
           )}
         </>
       )}
-    </>
+    </div>
   );
 }

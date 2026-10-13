@@ -5,6 +5,16 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Applied</title>
+    <script>
+      try {
+        const stored = localStorage.getItem("applied.theme");
+        const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        const dark = stored === "dark" || (stored !== "light" && prefersDark);
+        if (dark) document.documentElement.classList.add("dark");
+      } catch {
+        /* theme is applied after React mounts */
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

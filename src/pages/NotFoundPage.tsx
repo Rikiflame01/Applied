@@ -1,15 +1,16 @@
 import { Link } from "react-router";
+import { Button } from "@/components/ui/button";
 
 export function NotFoundPage() {
   return (
-    <section className="page-message">
-      <h1>That page does not exist</h1>
-      <p>You may have followed an old link, or mistyped the address.</p>
-      <p>
-        <Link to="/" className="text-link">
-          Back to all applications
-        </Link>
+    <section className="space-y-3">
+      <h1 className="text-2xl font-semibold tracking-tight">That page does not exist</h1>
+      <p className="text-muted-foreground">
+        You may have followed an old link, or mistyped the address.
       </p>
+      <Button asChild variant="link" className="h-auto px-0">
+        <Link to="/">Back to all applications</Link>
+      </Button>
     </section>
   );
 }
