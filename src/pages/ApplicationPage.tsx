@@ -1,16 +1,7 @@
 import { Link, useParams } from "react-router";
-import { seedApplications } from "../data/seed";
-import { daysSince, needsNudge } from "../lib/applications";
 import { StageBadge } from "../components/StageBadge";
-
-function formatSentOn(dateSent: string): string {
-  const sent = new Date(`${dateSent}T00:00:00`);
-  return sent.toLocaleDateString("en-GB", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-  });
-}
+import { seedApplications } from "../data/seed";
+import { describeTiming, needsNudge } from "../lib/applications";
 
 export function ApplicationPage() {
   const { id } = useParams();
@@ -31,8 +22,6 @@ export function ApplicationPage() {
   }
 
   const nudge = needsNudge(application);
-  const days = daysSince(application.dateSent);
-  const ago = days === 1 ? "1 day ago" : `${days} days ago`;
 
   return (
     <article className="page application-detail">
@@ -49,9 +38,7 @@ export function ApplicationPage() {
         <StageBadge stage={application.stage} />
       </header>
       <p className="application-card__meta">
-        {application.stage === "wishlist"
-          ? "Not sent yet"
-          : `Sent ${formatSentOn(application.dateSent)} · ${ago}`}
+        {describeTiming(application)}
         {application.link ? (
           <>
             {" · "}
