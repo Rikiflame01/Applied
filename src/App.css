@@ -19,10 +19,112 @@
   border-bottom: 1px solid var(--border);
 }
 
-.site-header h1 {
+.site-title {
   margin: 0;
   font-size: 1.5rem;
+  font-weight: 600;
   letter-spacing: -0.03em;
+  color: var(--text-h);
+  text-decoration: none;
+}
+
+.site-title:hover,
+.site-title:focus-visible {
+  text-decoration: underline;
+}
+
+.add-application {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.4rem 0.85rem;
+  border-radius: 8px;
+  background: var(--accent);
+  color: #fff;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.add-application:hover,
+.add-application:focus-visible {
+  filter: brightness(1.08);
+}
+
+.add-application.active {
+  outline: 2px solid var(--accent-border);
+  outline-offset: 2px;
+}
+
+.text-link {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.text-link:hover,
+.text-link:focus-visible {
+  text-decoration: underline;
+}
+
+.page,
+.page-message {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.page h1,
+.page-message h1,
+.application-detail h1 {
+  margin: 0;
+  font-size: 1.75rem;
+  letter-spacing: -0.03em;
+}
+
+.page-lede {
+  max-width: 40rem;
+}
+
+.application-card__link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+.application-card__link:hover .application-card__company,
+.application-card__link:focus-visible .application-card__company {
+  text-decoration: underline;
+}
+
+.application-card__link:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+  border-radius: 10px;
+}
+
+.application-detail__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.application-detail__role {
+  margin: 0.25rem 0 0;
+  font-size: 1.05rem;
+  color: var(--text);
+}
+
+.application-detail__notes {
+  margin-top: 0.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+
+.application-detail__notes h2 {
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text);
 }
 
 main {
@@ -43,6 +145,11 @@ main {
   border-radius: 12px;
   padding: 1rem 1.1rem;
   background: var(--card-bg);
+}
+
+.application-card:has(.application-card__link:hover),
+.application-card:has(.application-card__link:focus-visible) {
+  border-color: var(--accent-border);
 }
 
 .application-card__header {

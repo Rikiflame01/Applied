@@ -1,19 +1,22 @@
-import { ApplicationList } from "./components/ApplicationList";
-import { seedApplications } from "./data/seed";
+import { Route, Routes } from "react-router";
+import { Layout } from "./components/Layout";
+import { ApplicationPage } from "./pages/ApplicationPage";
+import { ApplicationsPage } from "./pages/ApplicationsPage";
+import { NewApplicationPage } from "./pages/NewApplicationPage";
+import { NotFoundPage } from "./pages/NotFoundPage";
 import "./App.css";
 
 function App() {
   return (
-    <>
-      <header className="site-header">
-        <h1>Applied</h1>
-      </header>
-      <main>
-        <h2 className="visually-hidden">Job applications</h2>
-        <ApplicationList applications={seedApplications} />
-      </main>
-    </>
+    <Routes>
+      <Route element={<Layout />}>
+        <Route path="/" element={<ApplicationsPage />} />
+        <Route path="/applications/:id" element={<ApplicationPage />} />
+        <Route path="/new" element={<NewApplicationPage />} />
+        <Route path="*" element={<NotFoundPage />} />
+      </Route>
+    </Routes>
   );
 }
 
-export default App
+export default App;
