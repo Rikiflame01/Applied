@@ -1,16 +1,9 @@
 import { Link } from "react-router";
-import { describeTiming, needsNudge } from "../lib/applications";
+import { compactTiming, needsNudge } from "../lib/applications";
 import type { Application } from "../types";
 import { StageBadge } from "./StageBadge";
 import { Badge } from "@/components/ui/badge";
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 
 type Props = {
   application: Application;
@@ -20,32 +13,35 @@ export function ApplicationCard({ application }: Props) {
   const nudge = needsNudge(application);
 
   return (
-    <Card className="h-full transition-colors hover:ring-foreground/20">
+    <Card
+      size="sm"
+      className="rounded-none border-0 bg-transparent py-0 shadow-none hover:bg-muted/70"
+    >
       <Link
         to={`/applications/${application.id}`}
-        className="block rounded-xl focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
+        className="flex items-center gap-2 px-3 py-1.5 outline-none focus-visible:bg-muted"
         aria-label={`${application.company}, ${application.role}`}
       >
-        <CardHeader>
-          <CardTitle>
-            {application.company}
-            <span className="font-normal text-muted-foreground">
-              {" "}
-              · {application.role}
-            </span>
-          </CardTitle>
-          <CardAction>
-            <StageBadge stage={application.stage} />
-          </CardAction>
-        </CardHeader>
-        <CardContent className="space-y-2">
-          <CardDescription>{describeTiming(application)}</CardDescription>
-          {nudge ? (
-            <Badge className="border-transparent bg-amber-100 text-amber-900 dark:bg-amber-950 dark:text-amber-200">
-              Needs a nudge
-            </Badge>
-          ) : null}
-        </CardContent>
+        <span className="min-w-0 flex-1 truncate font-medium text-foreground">
+          {application.company}
+          <span className="font-normal text-muted-foreground">
+            {" "}
+            · {application.role}
+          </span>
+        </span>
+        {nudge ? (
+          <Badge
+            variant="outline"
+            className="hidden border-transparent bg-transparent font-normal text-[#f0bf00] sm:inline-flex"
+          >
+            <span className="size-1.5 rounded-full bg-[#f0bf00]" />
+            Nudge
+          </Badge>
+        ) : null}
+        <StageBadge stage={application.stage} />
+        <span className="w-8 shrink-0 text-right text-[12px] text-muted-foreground tabular-nums">
+          {compactTiming(application)}
+        </span>
       </Link>
     </Card>
   );

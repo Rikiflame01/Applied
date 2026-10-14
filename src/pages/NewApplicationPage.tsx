@@ -70,12 +70,19 @@ export function NewApplicationPage() {
   }
 
   return (
-    <section className="space-y-4">
-      <Button asChild variant="link" className="h-auto px-0">
-        <Link to="/">← Back to all applications</Link>
-      </Button>
-      <h1 className="text-2xl font-semibold tracking-tight">Add an application</h1>
-      <form className="grid max-w-xl gap-4" onSubmit={handleSubmit(onSubmit)} noValidate>
+    <section>
+      <div className="flex h-11 items-center justify-between gap-3 border-b px-3">
+        <h1 className="text-[13px] font-medium tracking-tight">Add an application</h1>
+        <Button asChild variant="ghost" size="sm" className="text-muted-foreground">
+          <Link to="/">Cancel</Link>
+        </Button>
+      </div>
+
+      <form
+        className="grid max-w-xl gap-3 p-4"
+        onSubmit={handleSubmit(onSubmit)}
+        noValidate
+      >
         <div className="grid gap-1.5">
           <Label htmlFor="company">Company</Label>
           <Input
@@ -92,7 +99,7 @@ export function NewApplicationPage() {
             }}
           />
           {errors.company ? (
-            <span id="company-error" role="alert" className="text-sm font-medium text-destructive">
+            <span id="company-error" role="alert" className="text-[12px] font-medium text-destructive">
               {errors.company.message}
             </span>
           ) : null}
@@ -112,7 +119,7 @@ export function NewApplicationPage() {
             })}
           />
           {errors.role ? (
-            <span id="role-error" role="alert" className="text-sm font-medium text-destructive">
+            <span id="role-error" role="alert" className="text-[12px] font-medium text-destructive">
               {errors.role.message}
             </span>
           ) : null}
@@ -145,57 +152,59 @@ export function NewApplicationPage() {
             })}
           />
           {errors.link ? (
-            <span id="link-error" role="alert" className="text-sm font-medium text-destructive">
+            <span id="link-error" role="alert" className="text-[12px] font-medium text-destructive">
               {errors.link.message}
             </span>
           ) : null}
         </div>
 
-        <div className="grid gap-1.5">
-          <Label htmlFor="dateSent">Date sent</Label>
-          <Input
-            id="dateSent"
-            type="date"
-            aria-invalid={errors.dateSent ? true : undefined}
-            aria-describedby={errors.dateSent ? "dateSent-error" : undefined}
-            disabled={isSubmitting}
-            {...register("dateSent", {
-              required: "Date sent is required",
-              validate: (value) =>
-                value <= localIsoDate() || "You cannot have sent it tomorrow",
-            })}
-          />
-          {errors.dateSent ? (
-            <span id="dateSent-error" role="alert" className="text-sm font-medium text-destructive">
-              {errors.dateSent.message}
-            </span>
-          ) : null}
-        </div>
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+          <div className="grid gap-1.5">
+            <Label htmlFor="dateSent">Date sent</Label>
+            <Input
+              id="dateSent"
+              type="date"
+              aria-invalid={errors.dateSent ? true : undefined}
+              aria-describedby={errors.dateSent ? "dateSent-error" : undefined}
+              disabled={isSubmitting}
+              {...register("dateSent", {
+                required: "Date sent is required",
+                validate: (value) =>
+                  value <= localIsoDate() || "You cannot have sent it tomorrow",
+              })}
+            />
+            {errors.dateSent ? (
+              <span id="dateSent-error" role="alert" className="text-[12px] font-medium text-destructive">
+                {errors.dateSent.message}
+              </span>
+            ) : null}
+          </div>
 
-        <div className="grid gap-1.5">
-          <Label htmlFor="stage">Stage</Label>
-          <Controller
-            name="stage"
-            control={control}
-            render={({ field }) => (
-              <Select
-                value={field.value}
-                onValueChange={field.onChange}
-                disabled={isSubmitting}
-              >
-                <SelectTrigger id="stage" className="w-full">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {STAGES.map((stage) => (
-                    <SelectItem key={stage} value={stage}>
-                      {STAGE_LABELS[stage]}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            )}
-          />
+          <div className="grid gap-1.5">
+            <Label htmlFor="stage">Stage</Label>
+            <Controller
+              name="stage"
+              control={control}
+              render={({ field }) => (
+                <Select
+                  value={field.value}
+                  onValueChange={field.onChange}
+                  disabled={isSubmitting}
+                >
+                  <SelectTrigger id="stage" className="w-full">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {STAGES.map((stage) => (
+                      <SelectItem key={stage} value={stage}>
+                        {STAGE_LABELS[stage]}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
+            />
+          </div>
         </div>
 
         <div className="grid gap-1.5">
@@ -203,11 +212,11 @@ export function NewApplicationPage() {
           <Textarea id="notes" rows={4} disabled={isSubmitting} {...register("notes")} />
         </div>
 
-        <div className="flex flex-wrap items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2 pt-1">
           <Button type="submit" variant="accent" disabled={isSubmitting}>
             {isSubmitting ? "Saving…" : "Save application"}
           </Button>
-          <Button asChild variant="link">
+          <Button asChild variant="ghost">
             <Link to="/">Cancel</Link>
           </Button>
         </div>

@@ -3,8 +3,8 @@ import { Button } from "@/components/ui/button";
 
 export function NotFoundPage() {
   return (
-    <section className="space-y-3">
-      <h1 className="text-2xl font-semibold tracking-tight">That page does not exist</h1>
+    <section className="space-y-3 p-4">
+      <h1 className="text-[15px] font-medium tracking-tight">That page does not exist</h1>
       <p className="text-muted-foreground">
         You may have followed an old link, or mistyped the address.
       </p>

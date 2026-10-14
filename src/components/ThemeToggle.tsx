@@ -9,10 +9,11 @@ export function ThemeToggle() {
   return (
     <Button
       type="button"
-      variant="outline"
-      size="icon"
+      variant="ghost"
+      size="icon-sm"
       onClick={toggleTheme}
       aria-label={`Switch to ${next} theme`}
+      className="text-muted-foreground"
     >
       {theme === "dark" ? <Sun /> : <Moon />}
     </Button>

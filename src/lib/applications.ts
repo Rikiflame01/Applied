@@ -72,3 +72,8 @@ export function describeTiming(application: Application): string {
   const ago = days === 1 ? "1 day ago" : `${days} days ago`;
   return `Sent ${formatSentOn(application.dateSent)} · ${ago}`;
 }
+
+export function compactTiming(application: Application): string {
+  if (application.stage === "wishlist") return "—";
+  return `${daysSince(application.dateSent)}d`;
+}

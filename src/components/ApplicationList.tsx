@@ -11,7 +11,7 @@ export function ApplicationList({ applications }: Props) {
   );
 
   return (
-    <ul className="grid grid-cols-1 gap-3 md:grid-cols-2">
+    <ul className="divide-y border-y">
       {newestFirst.map((application) => (
         <li key={application.id}>
           <ApplicationCard application={application} />

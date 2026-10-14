@@ -25,27 +25,40 @@ export function ApplicationsPage() {
   });
 
   return (
-    <div className="space-y-4">
-      <h1 className="sr-only">Job applications</h1>
+    <div>
+      <div className="flex h-11 items-center justify-between gap-3 border-b px-3">
+        <div className="flex min-w-0 items-baseline gap-2">
+          <h1 className="text-[13px] font-medium tracking-tight">Applications</h1>
+          {loading ? null : (
+            <span className="text-[12px] text-muted-foreground tabular-nums">
+              {applications.length}
+            </span>
+          )}
+        </div>
+        <Button asChild variant="accent" size="sm" className="hidden md:inline-flex">
+          <Link to="/new">New</Link>
+        </Button>
+      </div>
+
       {loading ? (
-        <div className="grid grid-cols-1 gap-3 md:grid-cols-2" aria-live="polite" aria-busy="true">
+        <div className="divide-y border-b" aria-live="polite" aria-busy="true">
           <p className="sr-only">Loading applications…</p>
-          <Skeleton className="h-28" />
-          <Skeleton className="h-28" />
-          <Skeleton className="h-28" />
-          <Skeleton className="h-28" />
+          <Skeleton className="h-8 rounded-none" />
+          <Skeleton className="h-8 rounded-none" />
+          <Skeleton className="h-8 rounded-none" />
+          <Skeleton className="h-8 rounded-none" />
         </div>
       ) : error ? (
-        <section className="space-y-3">
-          <h2 className="text-xl font-semibold tracking-tight">Something went wrong</h2>
+        <section className="space-y-3 p-4">
+          <h2 className="text-[15px] font-medium tracking-tight">Something went wrong</h2>
           <p className="text-muted-foreground">{error}</p>
           <Button type="button" variant="outline" onClick={() => void reload()}>
             Try again
           </Button>
         </section>
       ) : applications.length === 0 ? (
-        <section className="space-y-3">
-          <h2 className="text-xl font-semibold tracking-tight">There is nothing here yet</h2>
+        <section className="space-y-3 p-4">
+          <h2 className="text-[15px] font-medium tracking-tight">There is nothing here yet</h2>
           <p className="text-muted-foreground">
             Add your first application and it will show up on this list.
           </p>
@@ -55,16 +68,18 @@ export function ApplicationsPage() {
         </section>
       ) : (
         <>
-          <StageSummary counts={counts} />
-          <FilterBar
-            search={search}
-            onSearchChange={setSearch}
-            stage={stage}
-            onStageChange={setStage}
-          />
+          <div className="flex flex-col gap-2 border-b px-3 py-2">
+            <StageSummary counts={counts} stage={stage} onStageChange={setStage} />
+            <FilterBar
+              search={search}
+              onSearchChange={setSearch}
+              stage={stage}
+              onStageChange={setStage}
+            />
+          </div>
           {filtered.length === 0 ? (
-            <section className="space-y-3">
-              <h2 className="text-xl font-semibold tracking-tight">
+            <section className="space-y-3 p-4">
+              <h2 className="text-[15px] font-medium tracking-tight">
                 No jobs match those filters
               </h2>
               <p className="text-muted-foreground">

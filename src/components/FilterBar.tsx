@@ -1,3 +1,4 @@
+import { Search } from "lucide-react";
 import { STAGE_LABELS, STAGES } from "../lib/applications";
 import type { Stage } from "../types";
 import { Input } from "@/components/ui/input";
@@ -27,21 +28,27 @@ export function FilterBar({
 }: Props) {
   return (
     <form
-      className="mb-4 grid grid-cols-1 gap-3 md:grid-cols-[1fr_12rem] md:items-end"
+      className="flex flex-wrap items-center gap-2"
       onSubmit={(event) => event.preventDefault()}
     >
-      <div className="grid gap-1.5">
-        <Label htmlFor="application-search">Search company or job title</Label>
+      <div className="relative min-w-0 flex-1">
+        <Label htmlFor="application-search" className="sr-only">
+          Search company or job title
+        </Label>
+        <Search className="pointer-events-none absolute top-1/2 left-2 size-3.5 -translate-y-1/2 text-muted-foreground" />
         <Input
           id="application-search"
           type="search"
           value={search}
           onChange={(event) => onSearchChange(event.target.value)}
-          placeholder="Search company or job title…"
+          placeholder="Filter by company or title…"
+          className="pl-7"
         />
       </div>
-      <div className="grid gap-1.5">
-        <Label htmlFor="application-stage-filter">Stage</Label>
+      <div className="w-full sm:w-36">
+        <Label htmlFor="application-stage-filter" className="sr-only">
+          Stage
+        </Label>
         <Select
           value={stage}
           onValueChange={(value) => onStageChange(value as StageFilter)}
